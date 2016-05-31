@@ -1,7 +1,8 @@
+
   /**
    * Changes Phones from utm mark
    *
-   * version 0.0.1
+   * version 0.0.2
    * Copyright 2016 by Aliaksandr Radzevich
    */
 
@@ -14,7 +15,15 @@
       searcher: searcher || 'yandex'
     };
 
-    if (options.utm !== window.location.search && localStorage.getItem('utm_'+options.searcher+'') !== options.searcher) {
+    options.windowSearch = window.location.search;
+
+    if (options.windowSearch.indexOf('&') >= 0) {
+      var cutoff = options.windowSearch.split('&');
+      var cutoffUtm = cutoff[0];
+      options.windowSearch = cutoffUtm;
+    }
+
+    if (options.utm !== options.windowSearch && localStorage.getItem('utm_'+options.searcher+'') !== options.searcher) {
       return;
     }
     if (options.phone.length !== 13) {
