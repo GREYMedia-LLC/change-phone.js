@@ -2,7 +2,7 @@
   /**
    * Changes Phones from utm mark
    *
-   * version 0.0.2
+   * version 0.0.3
    * Copyright 2016 by Aliaksandr Radzevich
    */
 
@@ -17,10 +17,10 @@
 
     options.windowSearch = window.location.search;
 
-    if (options.windowSearch.indexOf('&') >= 0) {
-      var cutoff = options.windowSearch.split('&');
-      var cutoffUtm = cutoff[0];
-      options.windowSearch = cutoffUtm;
+    if (options.windowSearch.match(/utm_source/)) {
+      // соответствует строке содержащей метку с буквами до амперсанда
+      var regex = /\?utm_source=[^&]+/;
+      options.windowSearch = options.windowSearch.match(regex)[0];
     }
 
     if (options.utm !== options.windowSearch && localStorage.getItem('utm_'+options.searcher+'') !== options.searcher) {
