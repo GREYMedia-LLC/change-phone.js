@@ -2,8 +2,8 @@
   /**
    * Changes Phones from utm mark
    *
-   * version 0.0.3
-   * Copyright 2016 by Aliaksandr Radzevich
+   * version 0.0.4
+   * Copyright 2016 by Rasy
    */
 
   function changePhones(phone, url, utm, searcher) {
@@ -11,19 +11,19 @@
     var options = {
       phone: phone || null,
       url: url || '.dynamic-url',
-      utm: utm || '?utm_source=yandex',
+      utm: utm || '#utm_source=yandex',
       searcher: searcher || 'yandex'
     };
 
-    options.windowSearch = window.location.search;
+    options.windowComponent = window.location.hash;
 
-    if (options.windowSearch.match(/utm_source/)) {
-      // соответствует строке содержащей метку с буквами до амперсанда
-      var regex = /\?utm_source=[^&]+/;
-      options.windowSearch = options.windowSearch.match(regex)[0];
+    if (options.windowComponent.match(/utm_source/)) {
+      // соответствует строке содержащей метку с буквами до амперсанда, вопроса или цифры
+      var regex = /#utm_source=[^&|?|\d]+/;
+      options.windowComponent = options.windowComponent.match(regex)[0];
     }
 
-    if (options.utm !== options.windowSearch && localStorage.getItem('utm_'+options.searcher+'') !== options.searcher) {
+    if (options.utm !== options.windowComponent && localStorage.getItem('utm_'+options.searcher+'') !== options.searcher) {
       return;
     }
     if (options.phone.length !== 13) {
@@ -63,7 +63,7 @@
 
   function initUtm() {
     changePhones('+375332333436');
-    changePhones('+375442333446', '.dynamic-url1', '?utm_source=google','google');
+    changePhones('+375442333446', '.dynamic-url1', '#utm_source=google','google');
   }
 
   document.addEventListener('DOMContentLoaded', initUtm);
